@@ -1,0 +1,73 @@
+﻿<Window x:Class="Calculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="524" Width="350">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label Content="0"
+               Grid.ColumnSpan="4"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom"
+               FontSize="60"
+               x:Name="resultLabel"/> <!--x:Name이라고 하는 이유는 어떤 컨트롤들은 안에 Name이라는 속성이 없음 그러나 상위 클래스에 Name이 있는데 그걸 사용하기 위해서 이렇게 표기-->
+        <!--기능버튼-->
+        <Button x:Name ="acButton" Content="AC" Grid.Column="0" Grid.Row="1" Margin="8"/>
+        <Button x:Name="plusMinusBtn" Content="+/-" Grid.Column="1" Grid.Row="1" Margin="8"/>
+        <Button x:Name ="divButton" Content="%" Grid.Column="2" Grid.Row="1" Margin="8"/>
+
+        <!--연산버튼-->
+        <Button Content="/" Grid.Column="3" Grid.Row="1" Margin="8"
+                Click="OperationButton_Click"/>
+        <Button Content="*" Grid.Column="3" Grid.Row="2" Margin="8"
+                Click="OperationButton_Click"/>
+        <Button Content="-" Grid.Column="3" Grid.Row="3" Margin="8"
+                Click="OperationButton_Click"/>
+        <Button Content="+" Grid.Column="3" Grid.Row="4" Margin="8"
+                Click="OperationButton_Click"/>
+        <Button x:Name="EqualButton" Content="=" Grid.Column="3" Grid.Row="5" Margin="8"/>
+
+        <!--숫자버튼-->
+        <Button x:Name ="sevenButton" Content="7" Grid.Column="0" Grid.Row="2" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="eightButton" Content="8" Grid.Column="1" Grid.Row="2" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="nineButton" Content="9" Grid.Column="2" Grid.Row="2" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="fourButton" Content="4" Grid.Column="0" Grid.Row="3" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="fiveButton" Content="5" Grid.Column="1" Grid.Row="3" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="sixButton" Content="6" Grid.Column="2" Grid.Row="3" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="oneButton" Content="1" Grid.Column="0" Grid.Row="4" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="twoButton" Content="2" Grid.Column="1" Grid.Row="4" Margin="8"
+                Click="NumberButton_Click"/>
+        <Button x:Name ="threeButton" Content="3" Grid.Column="2" Grid.Row="4" Margin="8"
+                Click="NumberButton_Click"/>
+        
+        <!--0 & .-->
+        <Button x:Name ="zeroButton" Content="0" Grid.Column="0" Grid.Row="5" Margin="10" Grid.ColumnSpan="2"
+                Click="NumberButton_Click"/>
+        <Button Content="." Grid.Column="2" Grid.Row="5" Margin="10"/>
+
+    </Grid>
+</Window>
