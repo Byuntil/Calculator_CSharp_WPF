@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,25 +16,54 @@ using System.Windows.Shapes;
 
 namespace Calculator
 {
+    /*
+    public enum SelectedOperator
+    {
+        Addition, Substraction, multiplication, Division
+    }
+    */
     //partial keyword: 코드가 흩어져있을때(InitialzeComponent()함수는 다른 cs파일에 담겨있음) 컴파일러가 눈치채게 하는 키워드
     public partial class MainWindow : Window 
     {
         double lastValue; //처음 입력한 값을 저장하는 변수
+        String cal;
+        //SelectedOperator = selectedOperator;
+        double newValue;
+
+        double result;
         public MainWindow()
         {
             InitializeComponent();
             resultLabel.Content = "0"; //(.찍었을때 나오는 기호들 회색 스패너는 property 보라색 네모는 메소드, 번개표시는 이벤트)
             acButton.Click += AcButton_Click;//(이벤트 등록)Button필드의 상속되어있는것들에 Click이라는 이벤트델리게이트를 사용가능 그 델리게이트에 내가 만든 이벤트헨들러 함수를 넣는것 
             plusMinusBtn.Click += plusMinusBtn_Click;
-            divButton.Click += divButton_Click;
+            percentButton.Click += percentButton_Click;
             EqualButton.Click += EqualButton_Click;
         }
 
-        private void OperationButton_Click(object sender, RoutedEventArgs e) //sender에는 이 이벤트를 호출하도록 한 객체를 넘겨줌(예를 들어 8번버튼을 눌렀으면 8번이 객체가 됨)
+        private void OperationButton_Click(object sender, RoutedEventArgs e) //sender에는 이 이벤트를 호출하도록 한 객체를 넘겨줌(예를 들어 8번버튼을 눌렀으면 8번이 객체가 됨), 일일이 다르게 구현하는게 아님
         {
             if(double.TryParse(resultLabel.Content.ToString(), out lastValue))
             {
                 resultLabel.Content = "0";
+            }
+
+            if(sender == diviButton) //이 단계에선 계산이 이루어질 수 없다. 연산자들은 이항 연산자여서 변수가 두개 넘어가야하는데 지금 상태는 계산 불가능, 계산이 진행 될때는 = 이 눌렸을때, 지금단계는 연산자의 종류만
+            {
+                cal = "/";
+                //seletedOperator = SeletedOperator.Divison;
+            }
+            if(sender == mulButton)
+            {
+                cal = "*";
+            }
+            if(sender == subButton)
+            {
+                cal = "-";
+            }
+            if(sender == addButton)
+            {
+                cal = "+";
             }
         }
 
@@ -117,7 +147,7 @@ namespace Calculator
             value = -1 * value;
             resultLabel.Content = value.ToString();*/
         }
-        private void divButton_Click(object sender, RoutedEventArgs e)
+        private void percentButton_Click(object sender, RoutedEventArgs e)
         {
             //resultLabel.Content = $"{Convert.ToDouble(resultLabel.Content)/100}";
             
@@ -129,7 +159,38 @@ namespace Calculator
         }
         private void EqualButton_Click(object sender, RoutedEventArgs e)
         {
+            if (double.TryParse(resultLabel.Content.ToString(), out newValue))
+            {
+                if(cal == "+") //swich문으로도 가능
+                {
+                    result = SimpleMate.Add(lastValue, newValue);
+                }
+                if (cal == "-")
+                {
+                    result = SimpleMate.Sub(lastValue, newValue);
+                }
+                if (cal == "*")
+                {
+                    result = SimpleMate.Mul(lastValue, newValue);
+                }
+                if (cal == "/")
+                {
+                    result = SimpleMate.Div(lastValue, newValue);
+                }
+            }
+            resultLabel.Content = result.ToString();
 
+        }
+
+        private void dotButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(resultLabel.Content.ToString().Contains(".") == true)
+            {
+            }
+            else
+            {
+                resultLabel.Content += ".";
+            }
         }
     }
     

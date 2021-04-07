@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Calculator"
              StartupUri="MainWindow.xaml">
-    <Application.Resources>
+    <Application.Resources> <!--서로다른 window에서도 동일하게 Resource를 사용하고 싶다면-->
          
     </Application.Resources>
 </Application>
