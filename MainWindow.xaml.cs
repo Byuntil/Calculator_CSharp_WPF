@@ -16,58 +16,175 @@ using System.Windows.Shapes;
 
 namespace Calculator
 {
-    /*
     public enum SelectedOperator
     {
-        Addition, Substraction, multiplication, Division
+        Addition, Substraction, Multiplication, Division,
+        NotExist
     }
-    */
+
+    
     //partial keyword: 코드가 흩어져있을때(InitialzeComponent()함수는 다른 cs파일에 담겨있음) 컴파일러가 눈치채게 하는 키워드
     public partial class MainWindow : Window 
     {
-        double lastValue; //처음 입력한 값을 저장하는 변수
-        String cal;
-        //SelectedOperator = selectedOperator;
-        double newValue;
+        double lastValue = 0; //처음 입력한 값을 저장하는 변수
+        double nextValue = 0;
+        bool oneOrAnother = false;
+        
+        SelectedOperator selectedOperator;
 
-        double result;
         public MainWindow()
         {
             InitializeComponent();
-            resultLabel.Content = "0"; //(.찍었을때 나오는 기호들 회색 스패너는 property 보라색 네모는 메소드, 번개표시는 이벤트)
-            acButton.Click += AcButton_Click;//(이벤트 등록)Button필드의 상속되어있는것들에 Click이라는 이벤트델리게이트를 사용가능 그 델리게이트에 내가 만든 이벤트헨들러 함수를 넣는것 
+            resultLabel.Content = "0";
+            acButton.Click += AcButton_Click; 
             plusMinusBtn.Click += plusMinusBtn_Click;
             percentButton.Click += percentButton_Click;
             EqualButton.Click += EqualButton_Click;
         }
 
-        private void OperationButton_Click(object sender, RoutedEventArgs e) //sender에는 이 이벤트를 호출하도록 한 객체를 넘겨줌(예를 들어 8번버튼을 눌렀으면 8번이 객체가 됨), 일일이 다르게 구현하는게 아님
+        public void ControlOperation(bool oneOrA, object sender, double lastV)
+        {
+            if(oneOrA == false)
+            {
+                if (sender == diviButton)
+                {
+                    selectedOperator = SelectedOperator.Division;
+                    calDisplay.Content += lastV + " / ";
+                    nextValue = lastV;
+                }
+                if (sender == mulButton)
+                {
+                    selectedOperator = SelectedOperator.Multiplication;
+                    calDisplay.Content += lastV + " * ";
+                    nextValue = lastV;
+                }
+                if (sender == subButton)
+                {
+                    selectedOperator = SelectedOperator.Substraction;
+                    calDisplay.Content += lastV + " - ";
+                    nextValue = lastV;
+                }
+                if (sender == addButton)
+                {
+                    selectedOperator = SelectedOperator.Addition;
+                    calDisplay.Content += lastV + " + ";
+                    nextValue = lastV;
+                }
+                oneOrAnother = true;
+            }
+            else
+            {
+                if (selectedOperator == SelectedOperator.Division)
+                {
+                    nextValue = SimpleMate.Div(nextValue, lastV);
+                    if (sender == diviButton)
+                    {
+                        selectedOperator = SelectedOperator.Division;
+                        calDisplay.Content += lastV + " / ";
+                    }
+                    if (sender == mulButton)
+                    {
+                        selectedOperator = SelectedOperator.Multiplication;
+                        calDisplay.Content += lastV + " * ";
+                    }
+                    if (sender == subButton)
+                    {
+                        selectedOperator = SelectedOperator.Substraction;
+                        calDisplay.Content += lastV + " - ";
+                    }
+                    if (sender == addButton)
+                    {
+                        selectedOperator = SelectedOperator.Addition;
+                        calDisplay.Content += lastV + " + ";
+                    }
+
+                }
+                else if (selectedOperator == SelectedOperator.Multiplication)
+                {
+                    nextValue = SimpleMate.Mul(nextValue, lastV);
+                    if (sender == diviButton)
+                    {
+                        selectedOperator = SelectedOperator.Division;
+                        calDisplay.Content += lastV + " / ";
+                    }
+                    if (sender == mulButton)
+                    {
+                        selectedOperator = SelectedOperator.Multiplication;
+                        calDisplay.Content += lastV + " * ";
+                    }
+                    if (sender == subButton)
+                    {
+                        selectedOperator = SelectedOperator.Substraction;
+                        calDisplay.Content += lastV + " - ";
+                    }
+                    if (sender == addButton)
+                    {
+                        selectedOperator = SelectedOperator.Addition;
+                        calDisplay.Content += lastV + " + ";
+                    }
+                }
+                else if (selectedOperator == SelectedOperator.Substraction)
+                {
+                    nextValue = SimpleMate.Sub(nextValue, lastV);
+                    if (sender == diviButton)
+                    {
+                        selectedOperator = SelectedOperator.Division;
+                        calDisplay.Content += lastV + " / ";
+                    }
+                    if (sender == mulButton)
+                    {
+                        selectedOperator = SelectedOperator.Multiplication;
+                        calDisplay.Content += lastV + " * ";
+                    }
+                    if (sender == subButton)
+                    {
+                        selectedOperator = SelectedOperator.Substraction;
+                        calDisplay.Content += lastV + " - ";
+                    }
+                    if (sender == addButton)
+                    {
+                        selectedOperator = SelectedOperator.Addition;
+                        calDisplay.Content += lastV + " + ";
+                    }
+                }
+                else if (selectedOperator == SelectedOperator.Addition)
+                {
+                    nextValue = SimpleMate.Add(nextValue, lastV);
+                    if (sender == diviButton)
+                    {
+                        selectedOperator = SelectedOperator.Division;
+                        calDisplay.Content += lastV + " / ";
+                    }
+                    if (sender == mulButton)
+                    {
+                        selectedOperator = SelectedOperator.Multiplication;
+                        calDisplay.Content += lastV + " * ";
+                    }
+                    if (sender == subButton)
+                    {
+                        selectedOperator = SelectedOperator.Substraction;
+                        calDisplay.Content += lastV + " - ";
+                    }
+                    if (sender == addButton)
+                    {
+                        selectedOperator = SelectedOperator.Addition;
+                        calDisplay.Content += lastV + " + ";
+                    }
+                }
+            }
+        }
+        private void OperationButton_Click(object sender, RoutedEventArgs e)
         {
             if(double.TryParse(resultLabel.Content.ToString(), out lastValue))
             {
                 resultLabel.Content = "0";
+                ControlOperation(oneOrAnother, sender, lastValue);
             }
 
-            if(sender == diviButton) //이 단계에선 계산이 이루어질 수 없다. 연산자들은 이항 연산자여서 변수가 두개 넘어가야하는데 지금 상태는 계산 불가능, 계산이 진행 될때는 = 이 눌렸을때, 지금단계는 연산자의 종류만
-            {
-                cal = "/";
-                //seletedOperator = SeletedOperator.Divison;
-            }
-            if(sender == mulButton)
-            {
-                cal = "*";
-            }
-            if(sender == subButton)
-            {
-                cal = "-";
-            }
-            if(sender == addButton)
-            {
-                cal = "+";
-            }
+            
         }
 
-        private void NumberButton_Click(object sender, RoutedEventArgs e) //sender에는 이 이벤트를 호출하도록 한 객체를 넘겨줌(예를 들어 8번버튼을 눌렀으면 8번이 객체가 됨)
+        private void NumberButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedValue = 0;
 
@@ -128,15 +245,15 @@ namespace Calculator
 
         private void AcButton_Click(object sender, RoutedEventArgs e)
         {
-            //delegate void Click(object, RoutedEventArg) <-- 대리자 이니까 안에 들어갈 것도 형식이 맞춰져워함 void acbutton_click(object sender, routedEventtArgs)
             resultLabel.Content = "0";
+            selectedOperator = SelectedOperator.NotExist;
+            Label label = calDisplay;
+            label.Content = "";
         }
 
         private void plusMinusBtn_Click(object sender, RoutedEventArgs e)
         {
-           
-            //parse는 두가지가 있는데 TryParse -> 변환을 해서 반환을 성공했는지 실패했는지를 나타낸다.
-            if (double.TryParse(resultLabel.Content.ToString(), out lastValue)) //out => value를 받아와서 이 함수에 참조형으로 넣겠다는 뜻
+            if (double.TryParse(resultLabel.Content.ToString(), out lastValue))
             {
                 lastValue *= -1;
                 resultLabel.Content = lastValue.ToString();
@@ -148,7 +265,7 @@ namespace Calculator
             resultLabel.Content = value.ToString();*/
         }
         private void percentButton_Click(object sender, RoutedEventArgs e)
-        {
+        { 
             //resultLabel.Content = $"{Convert.ToDouble(resultLabel.Content)/100}";
             
             if(double.TryParse(resultLabel.Content.ToString(), out lastValue))
@@ -159,26 +276,37 @@ namespace Calculator
         }
         private void EqualButton_Click(object sender, RoutedEventArgs e)
         {
+            double newValue;
+            double result = 0;
             if (double.TryParse(resultLabel.Content.ToString(), out newValue))
             {
-                if(cal == "+") //swich문으로도 가능
+                if(selectedOperator == SelectedOperator.Addition) //swich문으로도 가능
                 {
-                    result = SimpleMate.Add(lastValue, newValue);
+                    result = SimpleMate.Add(nextValue, newValue);
                 }
-                if (cal == "-")
+                if (selectedOperator == SelectedOperator.Substraction)
                 {
-                    result = SimpleMate.Sub(lastValue, newValue);
+                    result = SimpleMate.Sub(nextValue, newValue);
                 }
-                if (cal == "*")
+                if (selectedOperator == SelectedOperator.Multiplication)
                 {
-                    result = SimpleMate.Mul(lastValue, newValue);
+                    result = SimpleMate.Mul(nextValue, newValue);
                 }
-                if (cal == "/")
+                if (selectedOperator == SelectedOperator.Division) 
                 {
-                    result = SimpleMate.Div(lastValue, newValue);
+                    result = SimpleMate.Div(nextValue, newValue);
                 }
             }
             resultLabel.Content = result.ToString();
+            ItemCollection items = history.Items;
+            ListViewItem listViewItem = new ListViewItem();
+            listViewItem.Content = calDisplay.Content.ToString() + newValue.ToString() + " = " + result.ToString();
+            calDisplay.Content = "";
+            resultLabel.Content = "0";
+            items.Add(listViewItem);
+            selectedOperator = SelectedOperator.NotExist;
+            oneOrAnother = false;
+                
 
         }
 
@@ -191,6 +319,60 @@ namespace Calculator
             {
                 resultLabel.Content += ".";
             }
+        }
+
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            int leng = resultLabel.Content.ToString().Length;
+            if(leng>0)
+            {
+                if(leng == 1)
+                {
+                    resultLabel.Content = "0";
+                }
+                else
+                {
+                    resultLabel.Content = resultLabel.Content.ToString().Substring(0, leng - 1);
+                }
+            }
+        }
+
+        private void SquareRootButton_Click(object sender, RoutedEventArgs e)
+        {
+            double content = Convert.ToDouble(resultLabel.Content.ToString());
+            if(content>0)
+            {
+                content = Math.Sqrt(content);
+            }
+            resultLabel.Content = content;
+        }
+
+        private void SquareButton_Click(object sender, RoutedEventArgs e)
+        {
+            double content = Convert.ToDouble(resultLabel.Content.ToString());
+            content = Math.Pow(content,2);
+            resultLabel.Content = content;
+        }
+
+        private void inverseButton_Click(object sender, RoutedEventArgs e)
+        {
+            double content = Convert.ToDouble(resultLabel.Content.ToString());
+            if (content == 0)
+            {
+                MessageBox.Show("Wrong!!");
+                content = 0;
+            }
+            else
+            {
+                content = 1 / content;
+            }
+            
+            resultLabel.Content = content;
+        }
+
+        private void historyDelete_Click(object sender, RoutedEventArgs e)
+        {
+            history.Items.Clear();
         }
     }
     
