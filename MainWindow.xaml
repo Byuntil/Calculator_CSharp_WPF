@@ -55,7 +55,7 @@
                HorizontalAlignment="Right"
                VerticalAlignment="Bottom"
                FontSize="60"
-               x:Name="resultLabel"/> <!--x:Name이라고 하는 이유는 어떤 컨트롤들은 안에 Name이라는 속성이 없음 그러나 상위 클래스에 Name이 있는데 그걸 사용하기 위해서 이렇게 표기-->
+               x:Name="resultLabel"/> 
         <!--history-->
         <ListView x:Name="history"
                   Grid.Column="4"

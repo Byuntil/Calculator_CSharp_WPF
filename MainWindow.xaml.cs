@@ -28,7 +28,7 @@ namespace Calculator
     {
         double lastValue = 0; //처음 입력한 값을 저장하는 변수
         double nextValue = 0;
-        bool oneOrAnother = false;
+        bool oneOrAnother = false; //처음 계산인지 여러번 연산인지
         
         SelectedOperator selectedOperator;
 
@@ -44,6 +44,7 @@ namespace Calculator
 
         public void ControlOperation(bool oneOrA, object sender, double lastV)
         {
+            //처음 연산일때
             if(oneOrA == false)
             {
                 if (sender == diviButton)
@@ -72,6 +73,7 @@ namespace Calculator
                 }
                 oneOrAnother = true;
             }
+            //여러번 연산일때
             else
             {
                 if (selectedOperator == SelectedOperator.Division)
@@ -175,21 +177,17 @@ namespace Calculator
         }
         private void OperationButton_Click(object sender, RoutedEventArgs e)
         {
-            if(double.TryParse(resultLabel.Content.ToString(), out lastValue))
+            if (double.TryParse(resultLabel.Content.ToString(), out lastValue))
             {
                 resultLabel.Content = "0";
                 ControlOperation(oneOrAnother, sender, lastValue);
             }
-
             
         }
 
         private void NumberButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedValue = 0;
-
-            /*var button = (System.Windows.Controls.Button)sender;
-            selectedValue = int.Parse(button.Content.ToString());*/ //최악의 경우는 버튼이긴 하지만 7을 입력하기 위한 버튼이 아닐수도 있음=>그런데 입력되는 경우가 생길 수도 있어서 고유한 Name을 주어서 구별
 
             if(sender == zeroButton)
             {
@@ -232,13 +230,12 @@ namespace Calculator
                 selectedValue = 9;
             }
 
-            if(resultLabel.Content.ToString() == "0") //Content는 object 타입
+            if(resultLabel.Content.ToString() == "0")
             {
                 resultLabel.Content = $"{selectedValue}";
             }
             else
             {
-                //resultLabel.Content += "7";
                 resultLabel.Content = $"{resultLabel.Content}{selectedValue}";
             }
         }
@@ -258,16 +255,9 @@ namespace Calculator
                 lastValue *= -1;
                 resultLabel.Content = lastValue.ToString();
             }
-
-            /*double value = double.Parse(resultLabel.Content.ToString());
-
-            value = -1 * value;
-            resultLabel.Content = value.ToString();*/
         }
         private void percentButton_Click(object sender, RoutedEventArgs e)
-        { 
-            //resultLabel.Content = $"{Convert.ToDouble(resultLabel.Content)/100}";
-            
+        {  
             if(double.TryParse(resultLabel.Content.ToString(), out lastValue))
             {
                 lastValue /= 100;
@@ -280,7 +270,7 @@ namespace Calculator
             double result = 0;
             if (double.TryParse(resultLabel.Content.ToString(), out newValue))
             {
-                if(selectedOperator == SelectedOperator.Addition) //swich문으로도 가능
+                if(selectedOperator == SelectedOperator.Addition)
                 {
                     result = SimpleMate.Add(nextValue, newValue);
                 }
@@ -298,16 +288,21 @@ namespace Calculator
                 }
             }
             resultLabel.Content = result.ToString();
+            //collection에 history 저장
             ItemCollection items = history.Items;
+            //새로운 listviewtiem추가
             ListViewItem listViewItem = new ListViewItem();
+            //listvieitem의 content에 계산 결과
             listViewItem.Content = calDisplay.Content.ToString() + newValue.ToString() + " = " + result.ToString();
+            //초기화
             calDisplay.Content = "";
             resultLabel.Content = "0";
+            //collection에 listviewitem추가
             items.Add(listViewItem);
+            //operator를 기능 없는거로 바꿈(초기화)
             selectedOperator = SelectedOperator.NotExist;
+            //다시 false로 바꾸기
             oneOrAnother = false;
-                
-
         }
 
         private void dotButton_Click(object sender, RoutedEventArgs e)
